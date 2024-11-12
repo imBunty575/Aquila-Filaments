@@ -28,7 +28,7 @@
 
         // Function to load each JSON file and add it to plotData
         function loadData(setNumber) {
-            fetch(`./Set_${setNumber}.json`) // Updated to use backticks for template literal
+            fetch(`data/Set_${setNumber}.json`) // Updated to use backticks for template literal
                 .then(response => response.json())
                 .then(data => {
                     const color = css_colors[(setNumber - 1) % css_colors.length];
