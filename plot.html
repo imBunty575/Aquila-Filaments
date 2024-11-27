@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Plot of Filaments in the Aquila molecular cloud</title>
+    <title>3D Plot of Pixel Coordinates and Velocity</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         #plot {
@@ -16,7 +16,7 @@
     <div id="plot"></div>
 
     <script>
-        const numSets = 75; // Adjust to your actual number of sets
+        const numSets = 73; // Adjust to your actual number of sets
         const css_colors = [
             'blue', 'green', 'red', 'purple', 'orange', 'brown', 'pink', 'gray', 'olive', 'cyan',
             'magenta', 'lime', 'teal', 'navy', 'maroon', 'aqua', 'salmon', 'gold', 'indigo', 'violet',
@@ -28,7 +28,7 @@
 
         // Function to load each JSON file and add it to plotData
         function loadData(setNumber) {
-            fetch(`data/Set_${setNumber}.json`) // Updated to use backticks for template literal
+            fetch(`./Set_${setNumber}.json`)
                 .then(response => response.json())
                 .then(data => {
                     const color = css_colors[(setNumber - 1) % css_colors.length];
@@ -38,7 +38,7 @@
                         z: data.velocity,
                         mode: 'markers',
                         type: 'scatter3d',
-                        name: `Set ${setNumber}`, // Updated to use backticks for template literal
+                        name: `Set ${setNumber}`,
                         marker: {
                             color: color,
                             size: 4,
@@ -47,28 +47,23 @@
                     });
 
                     // If all sets are loaded, render the plot
-                    if (plotData.length === numSets - 1) { // Adjusted to account for skipped set
+                    if (plotData.length === numSets) {
                         Plotly.newPlot('plot', plotData, {
-                            // title: '3D Plot of Pixel Coordinates and Velocity',
                             scene: {
                                 xaxis: { title: 'RA', range: [0, 189], showbackground: true, backgroundcolor: 'lavender', gridcolor: 'white' },
                                 yaxis: { title: 'Dec', range: [0, 120], showbackground: true, backgroundcolor: 'lavender', gridcolor: 'white' },
-                                zaxis: { title: 'Velocity (km/s)', range: [4, 8.5], showbackground: true, backgroundcolor: 'lavender', gridcolor: 'white' },
-                                
+                                zaxis: { title: 'Velocity (km/s)', range: [4, 9], showbackground: true, backgroundcolor: 'lavender', gridcolor: 'white' }
                             },
-                            
                             margin: { l: 0, r: 0, b: 0, t: 50 }
                         });
                     }
                 })
-                .catch(error => console.error(`Error loading Set ${setNumber}:`, error)); // Updated to use backticks for template literal
+                .catch(error => console.error(`Error loading Set ${setNumber}:`, error));
         }
 
         // Load all JSON files
         for (let i = 1; i <= numSets; i++) {
-            if (i !== 2) {  // Skip Set 2 if needed
-                loadData(i);
-            }
+            loadData(i);
         }
     </script>
 </body>
